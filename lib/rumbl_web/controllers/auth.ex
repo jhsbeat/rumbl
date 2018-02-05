@@ -33,4 +33,10 @@ defmodule RumblWeb.Auth do
         {:error, :not_found, conn}
     end
   end
+
+  def logout(conn) do
+    configure_session(conn, drop: true)
+    # Or You can do below if you want to keep the session around and delete only the user ID information
+    # delete_session(conn, :user_id)
+  end
 end
