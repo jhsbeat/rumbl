@@ -7,6 +7,7 @@ defmodule Rumbl.Contents.Category do
 
   schema "categories" do
     field :name, :string
+    has_many :videos, Rumbl.Contents.Video
 
     timestamps()
   end
@@ -16,6 +17,7 @@ defmodule Rumbl.Contents.Category do
     category
     |> cast(attrs, [:name])
     |> validate_required([:name])
+    # |> foreign_key_constraint(:videos, name: :videos_category_id_fkey, message: "still exist")
   end
 
   def alphabetical(query) do
