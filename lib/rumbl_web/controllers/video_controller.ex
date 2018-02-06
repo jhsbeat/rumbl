@@ -14,7 +14,7 @@ defmodule RumblWeb.VideoController do
     render(conn, "index.html", videos: videos)
   end
 
-  def new(conn, _params, user) do
+  def new(conn, _params, _user) do
     changeset = Contents.change_video(%Video{})
     render(conn, "new.html", changeset: changeset)
   end
