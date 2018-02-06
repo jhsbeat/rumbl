@@ -21,6 +21,20 @@ defmodule Rumbl.Contents do
     Repo.all(Video)
   end
 
+  @doc false
+  def user_videos(user) do
+    user
+    |> Ecto.assoc(:videos)  # Returns an Ecto.Query
+    |> Repo.all()
+  end
+
+  @doc false
+  def user_video!(user, id) do
+    user 
+    |> Ecto.assoc(:videos)  # Returns an Ecto.Query
+    |> Repo.get!(id)
+  end
+
   @doc """
   Gets a single video.
 
