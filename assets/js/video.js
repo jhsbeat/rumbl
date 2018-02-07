@@ -15,12 +15,17 @@ let Video = {
     let msgInput = document.getElementById("msg-input")
     let postButton = document.getElementById("msg-submit")
     let vidChannel = socket.channel("videos:" + videoId)
+
+    msgInput.addEventListener("keypress", e => {
+      var keyCode = e.which || e.keyCode
+      if(keyCode == 13){
+        e.preventDefault()
+        this.postMessage(vidChannel, msgInput, Player.getCurrentTime())
+      }
+    })
     
     postButton.addEventListener("click", e => {
-      let payload = { body: msgInput.value, at: Player.getCurrentTime() }
-      vidChannel.push("new_annotation", payload)
-                .receive("error", e => console.error(e))
-      msgInput.value = ""
+      this.postMessage(vidChannel, msgInput, Player.getCurrentTime())
     })
 
     vidChannel.on("new_annotation", (resp) => {
@@ -44,6 +49,12 @@ let Video = {
         this.scheduleMessages(msgContainer, resp.annotations)
       })
       .receive("error", reason => console.error("join failed", reason))
+  },
+  postMessage(vidChannel, msgInput, at){
+    let payload = { body: msgInput.value, at: at }
+    vidChannel.push("new_annotation", payload)
+              .receive("error", e => console.error(e))
+    msgInput.value = ""
   },
   esc(str){
     let div = document.createElement("div")
