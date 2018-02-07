@@ -7,16 +7,19 @@ defmodule Rumbl.Contents.Annotation do
   schema "annotations" do
     field :at, :integer
     field :body, :string
-    field :user_id, :id
-    field :video_id, :id
+    belongs_to :user, Rumbl.Accounts.User
+    belongs_to :video, Rumbl.Contents.Video
 
     timestamps()
   end
 
+  @required [:body, :at, :video_id, :user_id]
+  @optional []
+
   @doc false
   def changeset(%Annotation{} = annotation, attrs) do
     annotation
-    |> cast(attrs, [:body, :at])
-    |> validate_required([:body, :at])
+    |> cast(attrs, @required ++ @optional)
+    |> validate_required(@required)
   end
 end
