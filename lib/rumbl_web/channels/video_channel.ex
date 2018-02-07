@@ -6,11 +6,15 @@ defmodule RumblWeb.VideoChannel do
     {:ok, socket}
   end
 
-  def handle_info(:ping, socket) do
-    count = socket.assigns[:count] || 1
-    push socket, "ping", %{count: count}
-
-    {:noreply, assign(socket, :count, count + 1)}
+  def handle_in("new_annotation", params, socket) do
+    # CAUTION!!! Forwarding a raw message payload without inspection is a big security risk.
+    # Ex. broadcast! socket, "new_annotation", params
+    broadcast! socket, "new_annotation", %{
+      user: %{username: "anon"},
+      body: params["body"],
+      at: params["at"]
+    }
+    {:reply, :ok, socket}
   end
 
 end
